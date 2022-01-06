@@ -4,6 +4,24 @@ const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
 
 //////////////////////////////////////////////////////
+
+const displayCountryByGPS = function (lat = 0, lng = 0) {
+  fetch(`https://geocode.xyz/${lat}, ${lng}?geoit=json`)
+    .then(response => {
+      if (!response.ok) throw new Error(`проблема с количеством запросов!`);
+      return response.json();
+    })
+    .then(data => {
+      console.log(`You are in ${data.country}, ${data.city}`);
+      return fetch(`https://restcountries.com/v3.1/name/${data.country}`);
+    })
+    .then(response => response.json())
+    .then(data => displayCountry(data[0]))
+    .catch(e => {
+      console.log(`Что-то пошло не так! Ошибка: ${e.message}`);
+    });
+};
+
 const displayCountry = function (data, className = '') {
   const currencies = data.currencies;
   const currencyName = Object.values(currencies)[0].name;
@@ -30,112 +48,15 @@ const displayCountry = function (data, className = '') {
   countriesContainer.style.opacity = 1;
 };
 
-// const getCountryData = function (countryName) {
-//   const request = new XMLHttpRequest();
-//   request.open('GET', `https://restcountries.com/v3.1/name/${countryName}`);
-//   request.send();
+//1 - done
+//2 - done
+//3 - done
+//4 - done
+//5 - done
+//6 - done
+//7 - done
 
-//   request.addEventListener('load', function () {
-//     const [data] = JSON.parse(this.responseText);
-
-//     const currencies = data.currencies;
-//     const currencyName = Object.values(currencies)[0].name;
-//     const currencySymbol = Object.values(currencies)[0].symbol;
-//     const languages = data.languages;
-//     const firstLang = Object.values(languages)[0];
-
-//     const html = `
-//       <article class="country">
-//         <img class="country__img" src="${data.flags.png}" />
-//         <div class="country__data">
-//           <h3 class="country__name">${data.name.common}</h3>
-//           <h4 class="country__region">${data.region}</h4>
-//           <p class="country__row"><span>👨‍👩‍👧‍👦</span>${(
-//             +data.population / 1000000
-//           ).toFixed(1)} Млн.</p>
-//           <p class="country__row"><span>🗣️</span>${firstLang}</p>
-//           <p class="country__row"><span>💰</span>${currencySymbol} ${currencyName}</p>
-//         </div>
-//       </article>
-//     `;
-
-//     countriesContainer.insertAdjacentHTML('beforeend', html);
-//     countriesContainer.style.opacity = 1;
-//   });
-// };
-
-// const getCountryBorderCountry = function (countryName) {
-//   const request = new XMLHttpRequest();
-//   request.open('GET', `https://restcountries.com/v3.1/name/${countryName}`);
-//   request.send();
-
-//   request.addEventListener('load', function () {
-//     const [data] = JSON.parse(this.responseText);
-//     displayCountry(data);
-
-//     //Получение соседних стран
-//     const [firstNeighbour] = data.borders;
-//     if (!firstNeighbour) return;
-
-//     const request1 = new XMLHttpRequest();
-//     request1.open(
-//       'GET',
-//       `https://restcountries.com/v3.1/alpha/${firstNeighbour}`
-//     );
-//     request1.send();
-
-//     request1.addEventListener('load', function () {
-//       const [data1] = JSON.parse(this.responseText);
-//       console.log(data1);
-
-//       displayCountry(data1, 'neighbour');
-//     });
-//   });
-// };
-
-// getCountryBorderCountry('ukraine');
-
-//old
-// const request = new XMLHttpRequest();
-// request.open('GET', `https://restcountries.com/v3.1/name/${countryName}`);
-// request.send();
-
-// const requestFetch = fetch('https://restcountries.com/v3.1/name/ukraine');
-// console.log(requestFetch);
-
-// const getCountryData = function (countryName) {
-//   fetch(`https://restcountries.com/v3.1/name/${countryName}`)
-//     .then(function (response) {
-//       // console.log(response);
-//       return response.json();
-//     })
-//     .then(function (response1) {
-//       // console.log(response1);
-//       displayCountry(response1[0]);
-//     });
-// };
-// getCountryData('russia');
-
-const getCountryData = function (countryName) {
-  fetch(`https://restcountries.com/v3.1/name/${countryName}`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Error ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      displayCountry(data[0]);
-      const firstNeighbour = data[0].borders[0];
-      if (!firstNeighbour) return;
-
-      return fetch(`https://restcountries.com/v3.1/alpha/${firstNeighbour}`);
-    })
-    .then(response => response.json())
-    .then(data => displayCountry(data[0], 'neighbour'))
-    .catch(error => alert(error));
-};
-
-btn.addEventListener('click', function () {
-  getCountryData('russia');
-});
+//test data
+displayCountryByGPS(35.756, 139.256);
+displayCountryByGPS(48.857, 2.358);
+displayCountryByGPS(40.708, -74.051);

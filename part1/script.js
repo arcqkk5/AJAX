@@ -139,3 +139,29 @@ const getCountryData = function (countryName) {
 btn.addEventListener('click', function () {
   getCountryData('russia');
 });
+
+// const lotteryPromise = new Promise(function (resolve, reject) {
+//   if (Math.random() >= 0.5) {
+//     resolve('Вы выиграли!');
+//   } else {
+//     reject('Вы проиграли:(');
+//   }
+// });
+
+// lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
+
+//Промисификация API гколокации
+
+// console.log('Получение местоположения!');
+const getUserPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(
+      position => resolve(position),
+      e => reject(e)
+    );
+  });
+};
+
+getUserPosition()
+  .then(pos => console.log(pos))
+  .catch(e => console.error(e));
